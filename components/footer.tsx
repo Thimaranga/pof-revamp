@@ -2,7 +2,20 @@ import Image from 'next/image';
 import { Facebook, Instagram, Linkedin, Mail, MapPin, Phone, Youtube } from 'lucide-react';
 import { SnapchatIcon, TikTokIcon } from '@/components/icons';
 
-const LOCATIONS = ['Dubai', 'Abu Dhabi', 'Sharjah', 'Ras Al Khaimah'];
+const ELITE_BRANDS = ['Rolls-Royce', 'Ferrari', 'Porsche', 'Lamborghini', 'Bentley'];
+
+const QUICK_LINKS = [
+  { label: 'Brands', href: '/#brands' },
+  { label: 'FAQs', href: '/#faq' },
+  { label: 'Membership', href: '/#membership' },
+  { label: 'About Us', href: '/#about' },
+  { label: 'Contact Us', href: '/#contact' },
+];
+
+const OFFICE_HOURS = [
+  { label: 'Monday – Saturday', value: '8:00 AM – 6:00 PM' },
+  { label: 'Sunday', value: 'Closed' },
+];
 
 const SOCIAL_LINKS = [
   { label: 'Facebook', href: 'https://www.facebook.com/pof.rental', Icon: Facebook },
@@ -17,54 +30,29 @@ export function Footer({ snap = false }: { snap?: boolean }) {
   return (
     <footer
       id="contact"
-      className={`scroll-mt-20 border-t border-[var(--border-subtle)] bg-[var(--bg-surface)] ${
-        snap ? 'snap-start' : ''
-      }`}
+      className={`scroll-mt-20 bg-ink text-cream ${snap ? 'snap-start' : ''}`}
     >
-      <div className="mx-auto max-w-content px-5 py-12 text-center sm:px-8 sm:py-14 sm:text-left lg:px-10">
-        <div className="grid gap-10 sm:grid-cols-3">
-          {/* Brand */}
+      <div className="mx-auto max-w-content px-5 py-12 sm:px-8 sm:py-14 lg:px-10">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+          {/* contact */}
           <div>
-            <div className="flex justify-center sm:justify-start">
-              <Image
-                src="/images/pof-logo.webp"
-                alt="POF Rental"
-                width={85}
-                height={38}
-                className="h-9 w-auto"
-              />
-            </div>
-            <p className="mt-3 text-sm text-[var(--text-secondary)] sm:max-w-xs">
-              Dubai&rsquo;s premier collection of exotic and luxury vehicles &mdash;
-              delivered to your door.
+            <Image
+              src="/images/pof-logo.webp"
+              alt="POF Rental"
+              width={85}
+              height={38}
+              className="h-9 w-auto"
+            />
+            <p className="mt-4 max-w-xs text-sm text-cream/70">
+              Pupil of Fate Motors division, providing the ultimate luxury car
+              hire experiences across the United Arab Emirates.
             </p>
 
-            <div className="mt-5 flex justify-center gap-2.5 sm:justify-start">
-              {SOCIAL_LINKS.map(({ label, href, Icon }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={label}
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border-subtle)] text-[var(--text-secondary)] transition-colors hover:border-gold hover:text-gold"
-                >
-                  <Icon size={16} />
-                </a>
-              ))}
-            </div>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h3 className="text-xs font-semibold uppercase tracking-[0.1em] text-[var(--text-secondary)]">
-              Contact
-            </h3>
-            <ul className="mt-4 space-y-3">
+            <ul className="mt-5 space-y-3">
               <li>
                 <a
                   href="tel:+971549957255"
-                  className="inline-flex items-center gap-2.5 text-sm text-[var(--text-primary)] transition-colors hover:text-gold"
+                  className="inline-flex items-center gap-2.5 text-sm text-cream/90 transition-colors hover:text-gold"
                 >
                   <Phone size={16} className="shrink-0 text-gold" />
                   +971 54 995 7255
@@ -73,38 +61,90 @@ export function Footer({ snap = false }: { snap?: boolean }) {
               <li>
                 <a
                   href="mailto:info.rental@pupiloffate.ae"
-                  className="inline-flex items-center gap-2.5 text-sm text-[var(--text-primary)] transition-colors hover:text-gold"
+                  className="inline-flex items-center gap-2.5 text-sm text-cream/90 transition-colors hover:text-gold"
                 >
                   <Mail size={16} className="shrink-0 text-gold" />
                   info.rental@pupiloffate.ae
                 </a>
               </li>
+              <li className="flex items-start gap-2.5 text-sm text-cream/90">
+                <MapPin size={16} className="mt-0.5 shrink-0 text-gold" />
+                <span>Pupil of Fate Showroom, Sheikh Zayed Road, Al Quoz 1, Dubai, UAE</span>
+              </li>
             </ul>
           </div>
 
-          {/* Locations */}
+          {/* Elite Brands */}
           <div>
-            <h3 className="text-xs font-semibold uppercase tracking-[0.1em] text-[var(--text-secondary)]">
-              Locations
+            <h3 className="text-xs font-semibold uppercase tracking-[0.1em] text-gold">
+              Elite Brands
             </h3>
-            <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-1">
-              {LOCATIONS.map((city) => (
-                <li
-                  key={city}
-                  className="inline-flex items-center justify-center gap-2 text-sm text-[var(--text-primary)] sm:justify-start"
-                >
-                  <MapPin size={16} className="shrink-0 text-gold" />
-                  {city}
+            <ul className="mt-4 space-y-2.5">
+              {ELITE_BRANDS.map((brand) => (
+                <li key={brand} className="text-sm text-cream/80">
+                  {brand}
                 </li>
               ))}
             </ul>
           </div>
+
+          {/* Quick Links — desktop/tablet only */}
+          <div className="hidden sm:block">
+            <h3 className="text-xs font-semibold uppercase tracking-[0.1em] text-gold">
+              Quick Links
+            </h3>
+            <ul className="mt-4 space-y-2.5">
+              {QUICK_LINKS.map((link) => (
+                <li key={link.label}>
+                  <a
+                    href={link.href}
+                    className="text-sm text-cream/80 transition-colors hover:text-gold"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Office Hours + Follow Us */}
+          <div>
+            <h3 className="text-xs font-semibold uppercase tracking-[0.1em] text-gold">
+              Office Hours
+            </h3>
+            <ul className="mt-4 space-y-2">
+              {OFFICE_HOURS.map(({ label, value }) => (
+                <li key={label} className="text-sm text-cream/80">
+                  {label}: {value}
+                </li>
+              ))}
+            </ul>
+
+            <h3 className="mt-6 text-xs font-semibold uppercase tracking-[0.1em] text-gold">
+              Follow Us
+            </h3>
+            <div className="mt-4 flex flex-wrap gap-2.5">
+              {SOCIAL_LINKS.map(({ label, href, Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-cream/20 text-cream/80 transition-colors hover:border-gold hover:text-gold"
+                >
+                  <Icon size={16} />
+                </a>
+              ))}
+            </div>
+          </div>
         </div>
 
-        <div className="mt-10 border-t border-[var(--border-subtle)] pt-6">
-          <p className="text-xs text-[var(--text-secondary)]">
-            &copy; {new Date().getFullYear()} POF Rental. All rights reserved.
+        <div className="mt-10 flex flex-col gap-3 border-t border-cream/10 pt-6 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left">
+          <p className="text-xs text-cream/60">
+            &copy; {new Date().getFullYear()} POF Rental. All rights reserved. Pupil of Fate Motors.
           </p>
+          <p className="text-xs text-cream/60">Privacy Policy · Terms &amp; Conditions</p>
         </div>
       </div>
     </footer>

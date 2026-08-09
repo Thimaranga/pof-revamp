@@ -2,10 +2,12 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { fleetCars } from '@/lib/data';
+import { fleetInventory } from '@/lib/data';
 
 const AED = new Intl.NumberFormat('en-US');
+const featuredCars = fleetInventory.filter((car) => car.featured);
 
 export function FeaturedFleet() {
   const scrollerRef = useRef<HTMLDivElement>(null);
@@ -56,38 +58,44 @@ export function FeaturedFleet() {
           ref={scrollerRef}
           className="no-scrollbar mt-10 flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-2 sm:mt-12"
         >
-          {fleetCars.map((car) => (
+          {featuredCars.map((car) => (
             <article
               key={car.id}
               className="w-[85%] shrink-0 snap-start overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-sm transition-shadow hover:shadow-lg sm:w-[calc(50%-12px)] lg:w-[calc(25%-18px)]"
             >
-              <div className="relative h-[180px] w-full">
-                <Image
-                  src={car.image}
-                  alt={car.name}
-                  fill
-                  sizes="(max-width: 640px) 85vw, (max-width: 1024px) 50vw, 25vw"
-                  className="object-cover"
-                />
-              </div>
+              <Link href={`/fleet/${car.id}`} className="block">
+                <div className="relative h-[180px] w-full">
+                  <Image
+                    src={car.image}
+                    alt={car.name}
+                    fill
+                    sizes="(max-width: 640px) 85vw, (max-width: 1024px) 50vw, 25vw"
+                    className="object-cover"
+                  />
+                </div>
+              </Link>
               <div className="p-5">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-gold">
-                  {car.brand}
-                </p>
-                <h3 className="mt-1 font-display text-base font-bold text-[var(--text-primary)]">
-                  {car.name}
-                </h3>
-                <p className="mt-1 text-xs text-[var(--text-secondary)]">{car.specs}</p>
-                <p className="mt-3 text-lg font-bold text-[var(--text-primary)]">
-                  AED {AED.format(car.price)}
-                  <span className="text-xs font-normal text-[var(--text-secondary)]"> /day</span>
-                </p>
-                <a
-                  href="#book"
+                <Link href={`/fleet/${car.id}`} className="block">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-gold">
+                    {car.brand}
+                  </p>
+                  <h3 className="mt-1 font-display text-base font-bold text-[var(--text-primary)] transition-colors hover:text-gold">
+                    {car.name}
+                  </h3>
+                  <p className="mt-1 text-xs text-[var(--text-secondary)]">
+                    {car.engine} &middot; {car.year} &middot; {car.seats} Seats
+                  </p>
+                  <p className="mt-3 text-lg font-bold text-[var(--text-primary)]">
+                    AED {AED.format(car.price)}
+                    <span className="text-xs font-normal text-[var(--text-secondary)]"> /day</span>
+                  </p>
+                </Link>
+                <Link
+                  href={`/fleet/${car.id}`}
                   className="mt-4 block rounded-full bg-ink py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-black dark:bg-white dark:text-ink dark:hover:bg-white/90"
                 >
                   Book Now
-                </a>
+                </Link>
               </div>
             </article>
           ))}

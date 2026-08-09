@@ -52,13 +52,13 @@ export function Membership() {
             );
           })}
         </div>
-
+        {/* This button stays disabled until this feature is completed */}
         <div className="mt-10 text-left">
           <a
             href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block rounded-full bg-gold px-8 py-3 text-sm font-semibold text-ink transition-transform hover:scale-[1.03] active:scale-[0.98]"
+            aria-disabled="true"
+            tabIndex={-1}
+            className="pointer-events-none inline-block cursor-not-allowed rounded-full bg-gold/50 px-8 py-3 text-sm font-semibold text-ink/50"
           >
             Become a Member
           </a>

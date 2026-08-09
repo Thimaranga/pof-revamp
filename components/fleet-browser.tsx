@@ -5,7 +5,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { fleetInventory } from '@/lib/data';
-import { buildCarBookingMessage, buildWhatsAppUrl } from '@/lib/whatsapp';
 
 const AED = new Intl.NumberFormat('en-US');
 const PER_PAGE = 8;
@@ -104,10 +103,6 @@ export function FleetBrowser() {
         <>
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {pagedResults.map((car) => {
-              const whatsappUrl = buildWhatsAppUrl(
-                buildCarBookingMessage(car.name, car.color),
-              );
-
               return (
                 <article
                   key={car.id}
@@ -160,14 +155,12 @@ export function FleetBrowser() {
                       )}
                     </Link>
 
-                    <a
-                      href={whatsappUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <Link
+                      href={`/fleet/${car.id}`}
                       className="mt-4 block rounded-full bg-ink py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-black dark:bg-white dark:text-ink dark:hover:bg-white/90"
                     >
                       Book Now
-                    </a>
+                    </Link>
                   </div>
                 </article>
               );

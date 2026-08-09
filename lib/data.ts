@@ -1,79 +1,3 @@
-export type FleetCar = {
-  id: string;
-  brand: string;
-  name: string;
-  specs: string;
-  price: number;
-  image: string;
-};
-
-export const fleetCars: FleetCar[] = [
-  {
-    id: 'lamborghini-revuelto',
-    brand: 'Lamborghini',
-    name: 'Lamborghini Revuelto',
-    specs: '6.5L V12 · 2024 · 2 Seats',
-    price: 6500,
-    image: '/images/car-lamborghini.png',
-  },
-  {
-    id: 'ferrari-purosangue',
-    brand: 'Ferrari',
-    name: 'Ferrari Purosangue',
-    specs: '6.5L V12 · 2024 · 4 Seats',
-    price: 6000,
-    image: '/images/car-ferrari.png',
-  },
-  {
-    id: 'porsche-911-gt3-rs',
-    brand: 'Porsche',
-    name: 'Porsche 911 GT3 RS',
-    specs: '4.0L H6 · 2023 · 2 Seats',
-    price: 5500,
-    image: '/images/car-porsche.png',
-  },
-  {
-    id: 'mercedes-amg-g63',
-    brand: 'Mercedes-Benz',
-    name: 'Mercedes-AMG G63',
-    specs: '4.0L V8 Biturbo · 2024 · 5 Seats',
-    price: 4500,
-    image: '/images/car-mercedes.png',
-  },
-  {
-    id: 'lamborghini-revuelto',
-    brand: 'Lamborghini',
-    name: 'Lamborghini Revuelto',
-    specs: '6.5L V12 · 2024 · 2 Seats',
-    price: 6500,
-    image: '/images/car-lamborghini.png',
-  },
-  {
-    id: 'ferrari-purosangue',
-    brand: 'Ferrari',
-    name: 'Ferrari Purosangue',
-    specs: '6.5L V12 · 2024 · 4 Seats',
-    price: 6000,
-    image: '/images/car-ferrari.png',
-  },
-  {
-    id: 'ferrari-purosangue',
-    brand: 'Ferrari',
-    name: 'Ferrari Purosangue',
-    specs: '6.5L V12 · 2024 · 4 Seats',
-    price: 6000,
-    image: '/images/car-ferrari.png',
-  },
-  {
-    id: 'porsche-911-gt3-rs',
-    brand: 'Porsche',
-    name: 'Porsche 911 GT3 RS',
-    specs: '4.0L H6 · 2023 · 2 Seats',
-    price: 5500,
-    image: '/images/car-porsche.png',
-  },
-];
-
 export type FleetCategory = 'Sports Car' | 'SUV' | 'Sedan' | 'Convertible';
 
 export type FleetListing = {
@@ -94,6 +18,8 @@ export type FleetListing = {
   /** Extra photos (interior, detail shots) shown on the vehicle's detail page. */
   gallery: string[];
   description: string;
+  /** Shown in the homepage's Featured Fleet carousel. */
+  featured?: boolean;
 };
 
 export const fleetInventory: FleetListing[] = [
@@ -108,6 +34,7 @@ export const fleetInventory: FleetListing[] = [
     seats: 2,
     transmission: 'Automatic',
     price: 6500,
+    featured: true,
     image: '/images/fleet/lamborghini-revuelto.webp',
     gallery: [
       '/images/fleet/gallery/lamborghini-revuelto-1.jpg',
@@ -129,6 +56,7 @@ export const fleetInventory: FleetListing[] = [
     seats: 2,
     transmission: 'Automatic',
     price: 6000,
+    featured: true,
     image: '/images/fleet/ferrari-12cilindri.jpg',
     gallery: [
       '/images/fleet/gallery/ferrari-12cilindri-1.jpg',
@@ -257,6 +185,7 @@ export const fleetInventory: FleetListing[] = [
     seats: 2,
     transmission: 'Automatic',
     price: 3250,
+    featured: true,
     image: '/images/fleet/porsche-911-gt3-rs-grey.jpg',
     gallery: [
       '/images/fleet/gallery/porsche-911-gt3-rs-grey-1.jpg',
@@ -324,6 +253,7 @@ export const fleetInventory: FleetListing[] = [
     seats: 5,
     transmission: 'Automatic',
     price: 2100,
+    featured: true,
     image: '/images/fleet/aston-martin-dbx707.webp',
     gallery: [
       '/images/fleet/gallery/aston-martin-dbx707-1.webp',
@@ -368,6 +298,7 @@ export const fleetInventory: FleetListing[] = [
     price: 2950,
     originalPrice: 3400,
     promoLabel: 'Grand Touring Special',
+    featured: true,
     image: '/images/fleet/bentley-continental-gtc.webp',
     gallery: [
       '/images/fleet/gallery/bentley-continental-gtc-1.webp',
@@ -494,6 +425,7 @@ export const fleetInventory: FleetListing[] = [
     seats: 5,
     transmission: 'Automatic',
     price: 1700,
+    featured: true,
     image: '/images/fleet/mercedes-amg-g63.png',
     gallery: [
       '/images/fleet/gallery/mercedes-amg-g63-1.jpg',
@@ -557,6 +489,7 @@ export const fleetInventory: FleetListing[] = [
     seats: 2,
     transmission: 'Automatic',
     price: 2450,
+    featured: true,
     image: '/images/fleet/mclaren-artura.jpg',
     gallery: [
       '/images/fleet/gallery/mclaren-artura-1.jpg',
@@ -633,6 +566,7 @@ export const fleetInventory: FleetListing[] = [
     seats: 5,
     transmission: 'Automatic',
     price: 2400,
+    featured: true,
     image: '/images/fleet/rolls-royce-cullinan.jpg',
     gallery: [
       '/images/fleet/gallery/rolls-royce-cullinan-1.jpg',
