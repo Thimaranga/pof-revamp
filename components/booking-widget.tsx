@@ -13,28 +13,31 @@ export function BookingWidget({ carName, color }: { carName: string; color: stri
   );
 
   return (
-    <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-cream)] p-5">
-      <h3 className="font-display text-sm font-bold text-[var(--text-primary)]">
+    <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-5 shadow-sm">
+      <h3 className="font-display text-base font-bold text-[var(--text-primary)]">
         Book this car
       </h3>
+      <p className="mt-1 text-xs text-[var(--text-secondary)]">
+        No upfront authorization hold for Elite Members
+      </p>
 
       <div className="mt-4 grid grid-cols-2 gap-3">
-        <label className="flex flex-col gap-1.5 text-xs font-medium text-[var(--text-secondary)]">
-          Pickup date
+        <label className="flex flex-col gap-1.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--text-secondary)]">
+          Pickup Date
           <input
             type="date"
             value={pickup}
             onChange={(e) => setPickup(e.target.value)}
-            className="rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-3 py-2 text-sm text-[var(--text-primary)] focus:outline-none focus:ring-1 focus:ring-gold"
+            className="rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-3 py-2 text-sm normal-case text-[var(--text-primary)] focus:outline-none focus:ring-1 focus:ring-gold"
           />
         </label>
-        <label className="flex flex-col gap-1.5 text-xs font-medium text-[var(--text-secondary)]">
-          Return date
+        <label className="flex flex-col gap-1.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--text-secondary)]">
+          Return Date
           <input
             type="date"
             value={returnDate}
             onChange={(e) => setReturnDate(e.target.value)}
-            className="rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-3 py-2 text-sm text-[var(--text-primary)] focus:outline-none focus:ring-1 focus:ring-gold"
+            className="rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-3 py-2 text-sm normal-case text-[var(--text-primary)] focus:outline-none focus:ring-1 focus:ring-gold"
           />
         </label>
       </div>
@@ -54,6 +57,9 @@ export function BookingWidget({ carName, color }: { carName: string; color: stri
         <a href="tel:+971549957255" className="font-medium text-gold hover:underline">
           {WHATSAPP_DISPLAY}
         </a>
+      </p>
+      <p className="mt-2 text-center text-xs text-[var(--text-secondary)]">
+        Free delivery to any location in Dubai, VIP Terminals, or luxury hotels.
       </p>
     </div>
   );

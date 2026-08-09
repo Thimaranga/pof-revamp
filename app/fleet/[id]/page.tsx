@@ -28,6 +28,12 @@ export function generateMetadata({
   };
 }
 
+function fuelTypeFor(engine: string) {
+  if (/hybrid/i.test(engine)) return 'Hybrid';
+  if (/electric/i.test(engine)) return 'Electric';
+  return 'Petrol';
+}
+
 export default function CarDetailPage({ params }: { params: { id: string } }) {
   const car = fleetInventory.find((c) => c.id === params.id);
   if (!car) notFound();
@@ -45,7 +51,7 @@ export default function CarDetailPage({ params }: { params: { id: string } }) {
     <main>
       <Navbar />
 
-      <section className="bg-[var(--bg-surface)] py-8 sm:py-12">
+      <section className="bg-[var(--bg-cream)] py-8 sm:py-12">
         <div className="mx-auto max-w-content px-5 sm:px-8 lg:px-10">
           <Link
             href="/fleet"
@@ -55,10 +61,12 @@ export default function CarDetailPage({ params }: { params: { id: string } }) {
             Back to Fleet
           </Link>
 
-          <div className="mt-6 grid grid-cols-1 gap-10 lg:grid-cols-[1.4fr_1fr]">
-            {/* Gallery */}
+          {/* Gallery */}
+          <div className="mt-6">
             <CarGallery images={gallery} alt={`${car.name} in ${car.color}`} />
+          </div>
 
+          <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-[1.6fr_1fr]">
             {/* Info panel */}
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.1em] text-gold">
@@ -68,7 +76,7 @@ export default function CarDetailPage({ params }: { params: { id: string } }) {
                 {car.name}
               </h1>
               <p className="mt-1 text-sm text-[var(--text-secondary)]">
-                {car.color} &middot; {car.year}
+                {car.color} &middot; {car.year} &middot; {fuelTypeFor(car.engine)}
               </p>
 
               <p className="mt-4 text-sm leading-relaxed text-[var(--text-secondary)]">
@@ -102,7 +110,7 @@ export default function CarDetailPage({ params }: { params: { id: string } }) {
                 {car.originalPrice ? (
                   <div>
                     <div className="flex flex-wrap items-baseline gap-2">
-                      <p className="text-2xl font-bold text-[var(--text-primary)]">
+                      <p className="text-2xl font-bold text-gold">
                         AED {AED.format(car.price)}
                         <span className="text-sm font-normal text-[var(--text-secondary)]">
                           {' '}
@@ -121,16 +129,21 @@ export default function CarDetailPage({ params }: { params: { id: string } }) {
                     )}
                   </div>
                 ) : (
-                  <p className="text-2xl font-bold text-[var(--text-primary)]">
+                  <p className="text-2xl font-bold text-gold">
                     AED {AED.format(car.price)}
                     <span className="text-sm font-normal text-[var(--text-secondary)]"> /day</span>
                   </p>
                 )}
+                <p className="mt-2 text-xs text-[var(--text-secondary)]">
+                  * Price includes insurance and 250 km daily allowance. Special
+                  weekly/monthly discount rates apply.
+                </p>
               </div>
+            </div>
 
-              <div className="mt-5">
-                <BookingWidget carName={car.name} color={car.color} />
-              </div>
+            {/* Booking widget */}
+            <div>
+              <BookingWidget carName={car.name} color={car.color} />
             </div>
           </div>
         </div>
@@ -145,36 +158,45 @@ export default function CarDetailPage({ params }: { params: { id: string } }) {
             </h2>
             <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-3">
               {related.map((r) => (
-                <Link
+                <div
                   key={r.id}
-                  href={`/fleet/${r.id}`}
                   className="overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-sm transition-shadow hover:shadow-lg"
                 >
-                  <div className="relative h-[160px] w-full">
-                    <Image
-                      src={r.image}
-                      alt={`${r.name} in ${r.color}`}
-                      fill
-                      sizes="(max-width: 640px) 100vw, 33vw"
-                      className="object-cover"
-                    />
-                  </div>
+                  <Link href={`/fleet/${r.id}`} className="block">
+                    <div className="relative h-[160px] w-full">
+                      <Image
+                        src={r.image}
+                        alt={`${r.name} in ${r.color}`}
+                        fill
+                        sizes="(max-width: 640px) 100vw, 33vw"
+                        className="object-cover"
+                      />
+                    </div>
+                  </Link>
                   <div className="p-4">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-gold">
-                      {r.brand}
-                    </p>
-                    <h3 className="mt-1 font-display text-sm font-bold text-[var(--text-primary)]">
-                      {r.name}
-                    </h3>
-                    <p className="mt-1 text-sm font-bold text-[var(--text-primary)]">
-                      AED {AED.format(r.price)}
-                      <span className="text-xs font-normal text-[var(--text-secondary)]">
-                        {' '}
-                        /day
-                      </span>
-                    </p>
+                    <Link href={`/fleet/${r.id}`} className="block">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-gold">
+                        {r.brand}
+                      </p>
+                      <h3 className="mt-1 font-display text-sm font-bold text-[var(--text-primary)]">
+                        {r.name}
+                      </h3>
+                      <p className="mt-1 text-sm font-bold text-[var(--text-primary)]">
+                        AED {AED.format(r.price)}
+                        <span className="text-xs font-normal text-[var(--text-secondary)]">
+                          {' '}
+                          /day
+                        </span>
+                      </p>
+                    </Link>
+                    <Link
+                      href={`/fleet/${r.id}`}
+                      className="mt-4 block rounded-full bg-ink py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-black dark:bg-white dark:text-ink dark:hover:bg-white/90"
+                    >
+                      View Details
+                    </Link>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           </div>
