@@ -1,29 +1,13 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Search, X } from 'lucide-react';
-import { fleetInventory, type FleetCategory } from '@/lib/data';
-import { buildCarBookingMessage, buildWhatsAppUrl } from '@/lib/whatsapp';
+import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
+import { fleetInventory } from '@/lib/data';
 
 const AED = new Intl.NumberFormat('en-US');
-
-const CATEGORIES: Array<'All' | FleetCategory> = [
-  'All',
-  'Sports Car',
-  'SUV',
-  'Sedan',
-  'Convertible',
-];
-
-type SortKey = 'featured' | 'price-asc' | 'price-desc';
-
-const SORT_OPTIONS: { value: SortKey; label: string }[] = [
-  { value: 'featured', label: 'Featured' },
-  { value: 'price-asc', label: 'Price: Low to High' },
-  { value: 'price-desc', label: 'Price: High to Low' },
-];
+const PER_PAGE = 8;
 
 export function FleetBrowser() {
   const brandOptions = useMemo(
@@ -32,110 +16,77 @@ export function FleetBrowser() {
   );
 
   const [search, setSearch] = useState('');
-  const [category, setCategory] = useState<'All' | FleetCategory>('All');
   const [brand, setBrand] = useState('All');
-  const [sort, setSort] = useState<SortKey>('featured');
+  const [page, setPage] = useState(0);
 
   const results = useMemo(() => {
     const query = search.trim().toLowerCase();
-    const filtered = fleetInventory.filter((car) => {
+    return fleetInventory.filter((car) => {
       const matchesQuery =
         !query ||
         car.name.toLowerCase().includes(query) ||
-        car.brand.toLowerCase().includes(query) ||
-        car.color.toLowerCase().includes(query) ||
-        car.category.toLowerCase().includes(query);
-      return (
-        matchesQuery &&
-        (category === 'All' || car.category === category) &&
-        (brand === 'All' || car.brand === brand)
-      );
+        car.brand.toLowerCase().includes(query);
+      return matchesQuery && (brand === 'All' || car.brand === brand);
     });
-    if (sort === 'price-asc') return [...filtered].sort((a, b) => a.price - b.price);
-    if (sort === 'price-desc') return [...filtered].sort((a, b) => b.price - a.price);
-    return filtered;
-  }, [search, category, brand, sort]);
+  }, [search, brand]);
+
+  const pageCount = Math.max(1, Math.ceil(results.length / PER_PAGE));
+
+  // Keep the current page in range whenever the filtered result set shrinks or grows.
+  useEffect(() => {
+    setPage((p) => Math.min(p, pageCount - 1));
+  }, [pageCount]);
+
+  const pagedResults = results.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE);
 
   return (
     <div>
       {/* Search */}
-      <div className="relative mx-auto mb-6 max-w-md">
-        <Search
-          size={18}
-          className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]"
-        />
+      <form
+        onSubmit={(e) => e.preventDefault()}
+        className="mx-auto flex w-full max-w-2xl items-center gap-2 rounded-full bg-[var(--bg-surface)] p-1.5 pl-4 shadow-sm ring-1 ring-[var(--border-subtle)] sm:gap-3"
+      >
+        <Search size={18} className="shrink-0 text-[var(--text-secondary)]" />
         <input
           type="text"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search by brand, model, or color"
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(0);
+          }}
+          placeholder="Search by brand or model..."
           aria-label="Search the fleet"
-          className="w-full rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] py-3 pl-11 pr-11 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] focus:outline-none focus:ring-1 focus:ring-gold"
+          className="w-full min-w-0 bg-transparent text-sm text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] focus:outline-none"
         />
-        {search && (
+        <button
+          type="submit"
+          className="shrink-0 rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white transition-transform hover:scale-[1.03] active:scale-[0.98] dark:bg-white dark:text-ink sm:px-6"
+        >
+          Search
+        </button>
+      </form>
+
+      {/* Brand filter pills */}
+      <div className="mt-6 flex flex-wrap justify-center gap-2">
+        {brandOptions.map((b) => (
           <button
+            key={b}
             type="button"
-            onClick={() => setSearch('')}
-            aria-label="Clear search"
-            className="absolute right-3 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full text-[var(--text-secondary)] transition-colors hover:bg-cream hover:text-[var(--text-primary)] dark:hover:bg-white/10"
+            onClick={() => {
+              setBrand(b);
+              setPage(0);
+            }}
+            aria-pressed={brand === b}
+            className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+              brand === b
+                ? 'border-gold bg-gold text-ink'
+                : 'border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:border-gold hover:text-[var(--text-primary)]'
+            }`}
           >
-            <X size={14} />
+            {b === 'All' ? 'All' : b}
           </button>
-        )}
+        ))}
       </div>
-
-      {/* Filter bar */}
-      <div className="flex flex-col gap-5 border-b border-[var(--border-subtle)] pb-6 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-wrap gap-2">
-          {CATEGORIES.map((c) => (
-            <button
-              key={c}
-              type="button"
-              onClick={() => setCategory(c)}
-              aria-pressed={category === c}
-              className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
-                category === c
-                  ? 'border-ink bg-ink text-white dark:border-white dark:bg-white dark:text-ink'
-                  : 'border-[var(--border-subtle)] text-[var(--text-secondary)] hover:border-ink hover:text-[var(--text-primary)] dark:hover:border-white dark:hover:text-white'
-              }`}
-            >
-              {c === 'All' ? 'All Vehicles' : c}
-            </button>
-          ))}
-        </div>
-
-        <div className="flex flex-wrap items-center gap-3">
-          <select
-            value={brand}
-            onChange={(e) => setBrand(e.target.value)}
-            aria-label="Filter by brand"
-            className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-4 py-2 text-sm text-[var(--text-primary)] focus:outline-none focus:ring-1 focus:ring-gold"
-          >
-            {brandOptions.map((b) => (
-              <option key={b} value={b}>
-                {b === 'All' ? 'All Brands' : b}
-              </option>
-            ))}
-          </select>
-
-          <select
-            value={sort}
-            onChange={(e) => setSort(e.target.value as SortKey)}
-            aria-label="Sort by"
-            className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-4 py-2 text-sm text-[var(--text-primary)] focus:outline-none focus:ring-1 focus:ring-gold"
-          >
-            {SORT_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      <p className="mt-6 text-xs text-[var(--text-secondary)]">
-        Showing {results.length} of {fleetInventory.length} vehicles
-      </p>
 
       {results.length === 0 ? (
         <div className="mt-16 text-center">
@@ -144,101 +95,118 @@ export function FleetBrowser() {
           </p>
           <p className="mt-2 text-sm text-[var(--text-secondary)]">
             {search
-              ? `No results for "${search}". Try a different search or filter.`
-              : 'Try a different brand or category.'}
+              ? `No results for "${search}". Try a different search or brand.`
+              : 'Try a different brand.'}
           </p>
         </div>
       ) : (
-        <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {results.map((car) => {
-            const discountPercent = car.originalPrice
-              ? Math.round((1 - car.price / car.originalPrice) * 100)
-              : null;
-            const whatsappUrl = buildWhatsAppUrl(
-              buildCarBookingMessage(car.name, car.color),
-            );
-
-            return (
-              <article
-                key={car.id}
-                className="overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-sm transition-shadow hover:shadow-lg"
-              >
-                <Link href={`/fleet/${car.id}`} className="block">
-                  <div className="relative h-[200px] w-full">
-                    <Image
-                      src={car.image}
-                      alt={`${car.name} in ${car.color}`}
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover"
-                    />
-                    <span className="absolute left-3 top-3 rounded-full bg-black/60 px-3 py-1 text-[11px] font-semibold text-white backdrop-blur-sm">
-                      {car.category}
-                    </span>
-                    {discountPercent && (
-                      <span className="absolute right-3 top-3 rounded-full bg-gold px-3 py-1 text-[11px] font-bold text-ink">
-                        {discountPercent}% OFF
-                      </span>
-                    )}
-                  </div>
-                </Link>
-                <div className="p-5">
+        <>
+          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {pagedResults.map((car) => {
+              return (
+                <article
+                  key={car.id}
+                  className="overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-sm transition-shadow hover:shadow-lg"
+                >
                   <Link href={`/fleet/${car.id}`} className="block">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-gold">
-                      {car.brand}
-                    </p>
-                    <h3 className="mt-1 font-display text-base font-bold text-[var(--text-primary)] transition-colors hover:text-gold">
-                      {car.name}
-                    </h3>
-                    <p className="mt-1 text-xs text-[var(--text-secondary)]">
-                      {car.engine} &middot; {car.year} &middot; {car.seats} Seats
-                    </p>
-                    <p className="mt-1 text-xs text-[var(--text-secondary)]">
-                      {car.color} &middot; {car.transmission}
-                    </p>
+                    <div className="relative h-[180px] w-full">
+                      <Image
+                        src={car.image}
+                        alt={`${car.name} in ${car.color}`}
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                        className="object-cover"
+                      />
+                    </div>
+                  </Link>
+                  <div className="p-5">
+                    <Link href={`/fleet/${car.id}`} className="block">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-gold">
+                        {car.brand}
+                      </p>
+                      <h3 className="mt-1 font-display text-base font-bold text-[var(--text-primary)] transition-colors hover:text-gold">
+                        {car.name}
+                      </h3>
+                      <p className="mt-1 text-xs text-[var(--text-secondary)]">
+                        {car.engine} &middot; {car.year} &middot; {car.seats} Seats
+                      </p>
 
-                    {car.originalPrice ? (
-                      <div className="mt-3">
-                        <p className="text-lg font-bold text-[var(--text-primary)]">
+                      {car.originalPrice ? (
+                        <div className="mt-3">
+                          <p className="text-lg font-bold text-[var(--text-primary)]">
+                            AED {AED.format(car.price)}
+                            <span className="text-xs font-normal text-[var(--text-secondary)]">
+                              {' '}
+                              /day
+                            </span>
+                          </p>
+                          <p className="text-xs text-[var(--text-secondary)] line-through">
+                            AED {AED.format(car.originalPrice)} /day
+                          </p>
+                        </div>
+                      ) : (
+                        <p className="mt-3 text-lg font-bold text-[var(--text-primary)]">
                           AED {AED.format(car.price)}
                           <span className="text-xs font-normal text-[var(--text-secondary)]">
                             {' '}
                             /day
                           </span>
                         </p>
-                        <p className="text-xs text-[var(--text-secondary)] line-through">
-                          AED {AED.format(car.originalPrice)} /day
-                        </p>
-                        {car.promoLabel && (
-                          <p className="mt-0.5 text-[11px] font-semibold text-gold">
-                            {car.promoLabel}
-                          </p>
-                        )}
-                      </div>
-                    ) : (
-                      <p className="mt-3 text-lg font-bold text-[var(--text-primary)]">
-                        AED {AED.format(car.price)}
-                        <span className="text-xs font-normal text-[var(--text-secondary)]">
-                          {' '}
-                          /day
-                        </span>
-                      </p>
-                    )}
-                  </Link>
+                      )}
+                    </Link>
 
-                  <a
-                    href={whatsappUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-4 block rounded-full bg-ink py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-black dark:bg-white dark:text-ink dark:hover:bg-white/90"
-                  >
-                    Book Now
-                  </a>
-                </div>
-              </article>
-            );
-          })}
-        </div>
+                    <Link
+                      href={`/fleet/${car.id}`}
+                      className="mt-4 block rounded-full bg-ink py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-black dark:bg-white dark:text-ink dark:hover:bg-white/90"
+                    >
+                      Book Now
+                    </Link>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+
+          {/* Prev/next + page dots */}
+          {pageCount > 1 && (
+            <div className="mt-10 flex items-center justify-center gap-4">
+              <button
+                type="button"
+                onClick={() => setPage((p) => Math.max(0, p - 1))}
+                disabled={page === 0}
+                aria-label="Previous page"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border-subtle)] text-[var(--text-secondary)] transition-colors hover:border-gold hover:text-gold disabled:pointer-events-none disabled:opacity-40"
+              >
+                <ChevronLeft size={18} />
+              </button>
+
+              <div className="flex items-center gap-2">
+                {Array.from({ length: pageCount }).map((_, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => setPage(i)}
+                    aria-label={`Go to page ${i + 1}`}
+                    aria-current={i === page}
+                    className={`h-2 w-2 rounded-full transition-colors ${
+                      i === page ? 'bg-gold' : 'bg-[var(--border-subtle)]'
+                    }`}
+                  />
+                ))}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setPage((p) => Math.min(pageCount - 1, p + 1))}
+                disabled={page === pageCount - 1}
+                aria-label="Next page"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border-subtle)] text-[var(--text-secondary)] transition-colors hover:border-gold hover:text-gold disabled:pointer-events-none disabled:opacity-40"
+              >
+                <ChevronRight size={18} />
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

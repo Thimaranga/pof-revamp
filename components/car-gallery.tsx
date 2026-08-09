@@ -8,13 +8,13 @@ export function CarGallery({ images, alt }: { images: string[]; alt: string }) {
 
   return (
     <div>
-      <div className="relative h-[280px] w-full overflow-hidden rounded-2xl border border-[var(--border-subtle)] sm:h-[420px]">
+      <div className="relative h-[280px] w-full overflow-hidden rounded-2xl border border-[var(--border-subtle)] sm:h-[420px] lg:h-[460px]">
         <Image
           src={images[active]}
           alt={alt}
           fill
           priority
-          sizes="(max-width: 1024px) 100vw, 60vw"
+          sizes="100vw"
           className="object-cover"
         />
       </div>
@@ -27,13 +27,13 @@ export function CarGallery({ images, alt }: { images: string[]; alt: string }) {
             onClick={() => setActive(i)}
             aria-label={`Show photo ${i + 1} of ${images.length}`}
             aria-pressed={active === i}
-            className={`relative h-16 overflow-hidden rounded-lg border-2 transition-colors sm:h-20 ${
+            className={`relative h-20 overflow-hidden rounded-xl border-2 transition-colors sm:h-24 ${
               active === i
                 ? 'border-gold'
                 : 'border-transparent opacity-80 hover:opacity-100'
             }`}
           >
-            <Image src={src} alt="" fill sizes="120px" className="object-cover" />
+            <Image src={src} alt="" fill sizes="150px" className="object-cover" />
           </button>
         ))}
       </div>

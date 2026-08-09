@@ -47,8 +47,6 @@ any type errors.
 - `fleetInventory` (`lib/data.ts`) is the full 30-car catalog powering
   `/fleet` and its detail pages — each entry has `image` (card/hero photo)
   and `gallery` (extra detail-page photos) under `public/images/fleet/`.
-  `fleetCars` is the smaller, separate dataset behind the home page's
-  Featured Fleet teaser.
 
 ## Project structure
 

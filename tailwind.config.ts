@@ -43,7 +43,7 @@ const config: Config = {
         body: ['var(--font-body)'],
       },
       maxWidth: {
-        content: '1440px',
+        content: '1600px',
       },
       keyframes: {
         marquee: {

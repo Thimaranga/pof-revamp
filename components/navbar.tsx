@@ -18,7 +18,7 @@ export function Navbar() {
   const [open, setOpen] = React.useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--border-subtle)] bg-[var(--nav-blur)] backdrop-blur-md">
+    <header className="sticky top-0 z-50 transform-gpu border-b border-[var(--border-subtle)] bg-[var(--nav-blur)] backdrop-blur-md">
       <nav className="mx-auto flex h-20 max-w-content items-center justify-between px-5 sm:px-8 lg:px-10">
         {/* Logo */}
         <Link href="/" className="flex items-center">
