@@ -22,7 +22,15 @@ export default function FleetPage() {
           fill
           priority
           sizes="100vw"
-          className="object-cover"
+          className="object-cover dark:sm:hidden"
+        />
+        <Image
+          src="/images/hero-dark.png"
+          alt="Luxury car arriving at a Dubai residence"
+          fill
+          priority
+          sizes="100vw"
+          className="hidden object-cover dark:sm:block"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/55 to-black/35" />
 

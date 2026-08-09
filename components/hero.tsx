@@ -6,19 +6,27 @@ export function Hero() {
     <div className="relative isolate h-full min-w-0 overflow-hidden">
       <Image
         src="/images/mobile-hero-1.webp"
-        alt="Silver Rolls-Royce parked at a luxury Dubai residence"
+        alt="1m celebration"
         fill
         priority
         sizes="100vw"
         className="object-cover sm:hidden"
       />
       <Image
-        src="/images/hero-6.webp"
+        src="/images/hero-bg.png"
         alt="Silver Rolls-Royce parked at a luxury Dubai residence"
         fill
         priority
         sizes="100vw"
-        className="hidden object-cover sm:block"
+        className="hidden object-cover sm:block dark:sm:hidden"
+      />
+      <Image
+        src="/images/hero-dark.png"
+        alt="Lightning speed lamborghini under the city light"
+        fill
+        priority
+        sizes="100vw"
+        className="hidden object-cover dark:sm:block"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10" />
 

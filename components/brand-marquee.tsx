@@ -5,7 +5,7 @@ export function BrandMarquee() {
   const track = [...brands, ...brands];
 
   return (
-    <div id="brands" role="region" aria-label="Brands we carry" className="min-w-0 border-y border-[var(--border-subtle)] bg-[var(--bg-surface)] py-8">
+    <div id="brands" role="region" aria-label="Brands we carry" className="min-w-0 border-y border-[var(--border-subtle)] bg-[var(--bg-surface)] py-8 dark:bg-[#575757]">
       <div className="no-scrollbar overflow-hidden">
         <ul className="flex w-max animate-marquee items-center gap-16 px-8">
           {track.map((brand, i) => (
