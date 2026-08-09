@@ -1,7 +1,9 @@
-# POF Rental — Home Page
+# POF Rental
 
-Next.js 14 (App Router) + TypeScript + Tailwind implementation of the home
-page design, with light/dark theming and full mobile responsiveness.
+Next.js 14 (App Router) + TypeScript + Tailwind implementation of the POF
+Rental site — a full-screen, scroll-snapped home page plus a searchable,
+filterable fleet catalog.
+Light/dark theming and mobile responsiveness throughout.
 
 ## Getting started
 
@@ -15,49 +17,65 @@ any type errors.
 
 ## Features
 
-- **Navbar** — logo, nav links, Book Now CTA, theme toggle, mobile drawer menu
-- **Hero** — full-bleed background image, headline, search bar
-- **Brand strip** — infinite auto-scrolling marquee
-- **Featured Fleet** — horizontally scrollable car cards with snap points
-- **Why Choose Us** — 6-card benefits grid
-- **Footer** — minimal site footer
+- **Navbar** — logo, nav links, Book Now CTA, theme toggle, mobile drawer menu.
+- **Hero** — full-bleed background image, headline, search bar.
+- **Brand strip** — infinite auto-scrolling marquee of real brand logos
+  (`public/images/brands/`).
+- **Featured Fleet** (home) — horizontally scrollable teaser of 4-5 cars
+  with a "View Full Fleet" card linking to `/fleet`.
+- **Fleet browser** (`/fleet`) — search box (matches brand/model/color/
+  category), category pills, brand + sort dropdowns, responsive card grid.
+  Cards show a gold "% OFF" badge and struck-through original price when a
+  car has an active promo.
+- **Car detail pages** — image gallery, specs table, description, promo
+  price, related vehicles, and the booking widget.
+- **Booking** — no backend; "Book Now" / the booking widget build a
+  prefilled WhatsApp deep link via `lib/whatsapp.ts` to the business's real
+  WhatsApp number, plus a tap-to-call fallback.
+- **Why Choose Us** — 6-card benefits grid.
+- **Footer** — logo, tagline, social icons (Facebook, Instagram, TikTok,
+  LinkedIn, YouTube, Snapchat), contact (phone/email), branch locations,
+  copyright. Shared across all pages; only the home page passes it
+  `snap` (see below).
 - **Dark / light theme** — toggle in the navbar (desktop + mobile), respects
   system preference by default, powered by `next-themes` + CSS variables
-  defined in `app/globals.css`
-
+  defined in `app/globals.css`.
 ## Content & assets
 
-- Car photos and the hero background live in `public/images/`.
-- Brand names in the marquee are text wordmarks (`components/brand-marquee.tsx`).
-  Swap in logo image files under `public/images/brands/` and update that
-  component with `<Image>` tags if official logo assets are available.
-- All copy (car names, specs, prices, benefit text) lives in `lib/data.ts` —
-  update content there without touching component files.
-- The Featured Fleet section currently lists 4 cars plus a "View Full Fleet"
-  card. Add more entries to `fleetCars` in `lib/data.ts` to extend it.
+- All copy (car names, specs, prices, promos....)
+  lives in `lib/data.ts`
+- `fleetInventory` (`lib/data.ts`) is the full 30-car catalog powering
+  `/fleet` and its detail pages — each entry has `image` (card/hero photo)
+  and `gallery` (extra detail-page photos) under `public/images/fleet/`.
+  `fleetCars` is the smaller, separate dataset behind the home page's
+  Featured Fleet teaser.
 
 ## Project structure
 
 ```
 app/
-  layout.tsx        Root layout, fonts, ThemeProvider
-  page.tsx           Assembles all sections
-  globals.css        Theme tokens (light + dark CSS variables)
+  layout.tsx           Root layout, fonts, ThemeProvider
+  page.tsx              Home page
+  globals.css           Theme tokens (light + dark CSS variables)
+  fleet/
+    page.tsx             /fleet — search + filter + browse
+    [id]/page.tsx         /fleet/[id] — per-car detail page
 components/
   navbar.tsx
   hero.tsx
   brand-marquee.tsx
-  featured-fleet.tsx
+  featured-fleet.tsx     Home page teaser strip
+  fleet-browser.tsx       /fleet search/filter/grid (client)
+  car-gallery.tsx         Thumbnail-switching photo gallery (client)
   why-choose-us.tsx
-  footer.tsx
+  footer.tsx              
+  icons.tsx               TikTok / Snapchat / WhatsApp brand icons
   theme-provider.tsx
   theme-toggle.tsx
 lib/
-  data.ts            Fleet cars, brands, benefits content
-public/images/        Car photos + hero background
+  data.ts                Fleet cars, full fleet inventory, brands, benefits
+  whatsapp.ts             WhatsApp booking link/message builders
+public/images/
+  brands/                 Brand logo SVGs
+  fleet/                  Fleet card + hero photos
 ```
-
-## Customizing
-
-Colors, fonts, and spacing tokens live in `tailwind.config.ts` and the
-`:root` / `.dark` blocks in `app/globals.css`.

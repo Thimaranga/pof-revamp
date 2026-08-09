@@ -1,16 +1,17 @@
 'use client';
 
 import * as React from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 import { ThemeToggle } from '@/components/theme-toggle';
 
 const NAV_LINKS = [
-  { label: 'Fleet', href: '#fleet' },
-  { label: 'Brands', href: '#brands' },
-  { label: 'Membership', href: '#membership' },
-  { label: 'About', href: '#about' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Fleet', href: '/fleet' },
+  // { label: 'Brands', href: '/#brands' },
+  { label: 'Membership', href: '/#membership' },
+  { label: 'Why us', href: '/#about' },
+  { label: 'Contact', href: '/#contact' },
 ];
 
 export function Navbar() {
@@ -20,13 +21,15 @@ export function Navbar() {
     <header className="sticky top-0 z-50 border-b border-[var(--border-subtle)] bg-[var(--nav-blur)] backdrop-blur-md">
       <nav className="mx-auto flex h-20 max-w-content items-center justify-between px-5 sm:px-8 lg:px-10">
         {/* Logo */}
-        <Link href="/" className="flex items-baseline gap-1.5">
-          <span className="font-display text-2xl font-extrabold tracking-tight text-[var(--text-primary)]">
-            POF
-          </span>
-          <span className="font-display text-[11px] font-semibold tracking-[0.15em] text-gold">
-            RENTAL
-          </span>
+        <Link href="/" className="flex items-center">
+          <Image
+            src="/images/pof-logo.webp"
+            alt="POF Rental"
+            width={85}
+            height={38}
+            priority
+            className="h-9 w-auto"
+          />
         </Link>
 
         {/* Desktop links */}

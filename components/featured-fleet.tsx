@@ -5,7 +5,10 @@ const AED = new Intl.NumberFormat('en-US');
 
 export function FeaturedFleet() {
   return (
-    <section id="fleet" className="bg-[var(--bg-surface)] py-20 sm:py-24">
+    <section
+      id="fleet"
+      className="flex min-h-[calc(100vh-5rem)] scroll-mt-20 snap-start flex-col justify-center bg-[var(--bg-surface)] py-20 sm:py-24"
+    >
       <div className="mx-auto max-w-content px-5 sm:px-8 lg:px-10">
         <div className="text-center">
           <h2 className="font-display text-2xl font-bold text-gold sm:text-3xl">
@@ -57,7 +60,7 @@ export function FeaturedFleet() {
           {/* Placeholder CTA card in the 5th slot; add a 5th car to
               fleetCars in lib/data.ts to replace it with a real listing. */}
           <a
-            href="#fleet"
+            href="/fleet"
             className="flex w-[280px] shrink-0 flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-[var(--border-subtle)] p-6 text-center transition-colors hover:bg-cream dark:hover:bg-white/5 sm:w-[300px]"
           >
             <span className="font-display text-base font-bold text-[var(--text-primary)]">
