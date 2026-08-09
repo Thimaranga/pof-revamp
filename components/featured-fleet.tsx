@@ -1,17 +1,49 @@
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { fleetCars } from '@/lib/data';
 
 const AED = new Intl.NumberFormat('en-US');
 
 export function FeaturedFleet() {
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const [page, setPage] = useState(0);
+  const [pageCount, setPageCount] = useState(1);
+
+  useEffect(() => {
+    const el = scrollerRef.current;
+    if (!el) return;
+
+    const update = () => {
+      setPageCount(Math.max(1, Math.round(el.scrollWidth / el.clientWidth)));
+      setPage(Math.round(el.scrollLeft / el.clientWidth));
+    };
+
+    update();
+    el.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    return () => {
+      el.removeEventListener('scroll', update);
+      window.removeEventListener('resize', update);
+    };
+  }, []);
+
+  const goToPage = (index: number) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    el.scrollTo({ left: index * el.clientWidth, behavior: 'smooth' });
+  };
+
   return (
     <section
       id="fleet"
       className="flex min-h-[calc(100vh-5rem)] scroll-mt-20 snap-start flex-col justify-center bg-[var(--bg-surface)] py-20 sm:py-24"
     >
-      <div className="mx-auto max-w-content px-5 sm:px-8 lg:px-10">
+      <div className="mx-auto w-full min-w-0 max-w-content px-5 sm:px-8 lg:px-10">
         <div className="text-center">
-          <h2 className="font-display text-2xl font-bold text-gold sm:text-3xl">
+          <h2 className="font-display text-2xl font-bold text-[var(--text-primary)] sm:text-3xl">
             Featured Fleet
           </h2>
           <p className="mt-2 text-sm text-[var(--text-secondary)] sm:text-base">
@@ -19,19 +51,22 @@ export function FeaturedFleet() {
           </p>
         </div>
 
-        {/* Horizontally scrollable row; snaps per card on touch devices */}
-        <div className="no-scrollbar mt-10 flex snap-x snap-mandatory gap-6 overflow-x-auto pb-2 sm:mt-12">
+        {/* Horizontally scrollable row; snaps per page, browsable via the arrows below */}
+        <div
+          ref={scrollerRef}
+          className="no-scrollbar mt-10 flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-2 sm:mt-12"
+        >
           {fleetCars.map((car) => (
             <article
               key={car.id}
-              className="w-[280px] shrink-0 snap-start overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-sm transition-shadow hover:shadow-lg sm:w-[300px]"
+              className="w-[85%] shrink-0 snap-start overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-sm transition-shadow hover:shadow-lg sm:w-[calc(50%-12px)] lg:w-[calc(25%-18px)]"
             >
               <div className="relative h-[180px] w-full">
                 <Image
                   src={car.image}
                   alt={car.name}
                   fill
-                  sizes="(max-width: 640px) 280px, 300px"
+                  sizes="(max-width: 640px) 85vw, (max-width: 1024px) 50vw, 25vw"
                   className="object-cover"
                 />
               </div>
@@ -56,21 +91,47 @@ export function FeaturedFleet() {
               </div>
             </article>
           ))}
-
-          {/* Placeholder CTA card in the 5th slot; add a 5th car to
-              fleetCars in lib/data.ts to replace it with a real listing. */}
-          <a
-            href="/fleet"
-            className="flex w-[280px] shrink-0 flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-[var(--border-subtle)] p-6 text-center transition-colors hover:bg-cream dark:hover:bg-white/5 sm:w-[300px]"
-          >
-            <span className="font-display text-base font-bold text-[var(--text-primary)]">
-              View Full Fleet
-            </span>
-            <span className="text-xs text-[var(--text-secondary)]">
-              20+ more exotic &amp; luxury vehicles
-            </span>
-          </a>
         </div>
+
+        {/* Prev/next + page dots; only shown once the cards overflow into multiple pages */}
+        {pageCount > 1 && (
+          <div className="mt-6 flex items-center justify-between sm:mt-8">
+            <button
+              type="button"
+              onClick={() => goToPage(Math.max(0, page - 1))}
+              disabled={page === 0}
+              aria-label="Previous vehicles"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border-subtle)] text-[var(--text-secondary)] transition-colors hover:border-gold hover:text-gold disabled:pointer-events-none disabled:opacity-40"
+            >
+              <ChevronLeft size={18} />
+            </button>
+
+            <div className="flex items-center gap-2">
+              {Array.from({ length: pageCount }).map((_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => goToPage(i)}
+                  aria-label={`Go to page ${i + 1}`}
+                  aria-current={i === page}
+                  className={`h-2 w-2 rounded-full transition-colors ${
+                    i === page ? 'bg-gold' : 'bg-[var(--border-subtle)]'
+                  }`}
+                />
+              ))}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => goToPage(Math.min(pageCount - 1, page + 1))}
+              disabled={page === pageCount - 1}
+              aria-label="Next vehicles"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border-subtle)] text-[var(--text-secondary)] transition-colors hover:border-gold hover:text-gold disabled:pointer-events-none disabled:opacity-40"
+            >
+              <ChevronRight size={18} />
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

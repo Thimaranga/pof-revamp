@@ -16,3 +16,8 @@ export function buildCarBookingMessage(
   message += ' Please share availability and pricing.';
   return message;
 }
+
+//Generic WhatsApp inquiry link
+export function buildInquiryMessage(topic: string) {
+  return `Hi! I'd like to know more about ${topic}.`;
+}

@@ -25,14 +25,6 @@ export const fleetCars: FleetCar[] = [
     image: '/images/car-ferrari.png',
   },
   {
-    id: 'mercedes-amg-g63',
-    brand: 'Mercedes-AMG',
-    name: 'Mercedes-AMG G63',
-    specs: '4.0L V8 Biturbo · 2024 · 5 Seats',
-    price: 4500,
-    image: '/images/car-mercedes.png',
-  },
-  {
     id: 'porsche-911-gt3-rs',
     brand: 'Porsche',
     name: 'Porsche 911 GT3 RS',
@@ -41,12 +33,44 @@ export const fleetCars: FleetCar[] = [
     image: '/images/car-porsche.png',
   },
   {
-    id: 'ferrari-purosangue-2',
+    id: 'mercedes-amg-g63',
+    brand: 'Mercedes-Benz',
+    name: 'Mercedes-AMG G63',
+    specs: '4.0L V8 Biturbo · 2024 · 5 Seats',
+    price: 4500,
+    image: '/images/car-mercedes.png',
+  },
+  {
+    id: 'lamborghini-revuelto',
+    brand: 'Lamborghini',
+    name: 'Lamborghini Revuelto',
+    specs: '6.5L V12 · 2024 · 2 Seats',
+    price: 6500,
+    image: '/images/car-lamborghini.png',
+  },
+  {
+    id: 'ferrari-purosangue',
     brand: 'Ferrari',
     name: 'Ferrari Purosangue',
     specs: '6.5L V12 · 2024 · 4 Seats',
     price: 6000,
     image: '/images/car-ferrari.png',
+  },
+  {
+    id: 'ferrari-purosangue',
+    brand: 'Ferrari',
+    name: 'Ferrari Purosangue',
+    specs: '6.5L V12 · 2024 · 4 Seats',
+    price: 6000,
+    image: '/images/car-ferrari.png',
+  },
+  {
+    id: 'porsche-911-gt3-rs',
+    brand: 'Porsche',
+    name: 'Porsche 911 GT3 RS',
+    specs: '4.0L H6 · 2023 · 2 Seats',
+    price: 5500,
+    image: '/images/car-porsche.png',
   },
 ];
 
@@ -730,6 +754,124 @@ export type Benefit = {
   description: string;
   icon: string;
 };
+
+export type RentalPlan = {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  unit: string;
+};
+
+export const rentalPlans: RentalPlan[] = [
+  {
+    id: 'daily',
+    name: 'Daily rental',
+    description: 'The most popular choice for tourists, special occasions, photoshoots, and one-day experiences. All models available.',
+    price: 4500,
+    unit: '/ day',
+  },
+  {
+    id: 'weekend',
+    name: 'Weekend rental',
+    description: 'Two to three days to explore Dubai and beyond at your pace. Ideal for combining city driving with a day trip to Abu Dhabi or Ras Al Khaimah.',
+    price: 12000,
+    unit: '/ weekend',
+  },
+  {
+    id: 'weekly',
+    name: 'Weekly rental',
+    description: 'Better value per day for guests on extended stays, covering a full week of premium mobility across the UAE.',
+    price: 28000,
+    unit: '/ week',
+  },
+  {
+    id: 'monthly',
+    name: 'Monthly rental',
+    description: 'Our long lease options are the best daily value available, designed for residents, relocating professionals, and corporate clients who want consistent access to a luxury rent a car in Dubai without a long-term commitment.',
+    price: 90000,
+    unit: '/ month',
+  },
+];
+
+export type MembershipPerk = {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+};
+
+export const membershipPerks: MembershipPerk[] = [
+  {
+    id: 'special-discounts',
+    title: 'Special Discounts',
+    description: 'Save up to 20% on our standard daily rates on select models.',
+    icon: 'Percent',
+  },
+  {
+    id: 'no-deposit',
+    title: 'No Deposit Required',
+    description: 'Skip credit card authorization blocks entirely.',
+    icon: 'ShieldCheck',
+  },
+  {
+    id: 'birthday-free-rent',
+    title: 'Birthday Free Rent',
+    description: 'Enjoy a complimentary drive on your special day.',
+    icon: 'Gift',
+  },
+  {
+    id: 'free-delivery',
+    title: 'Free UAE-Wide Delivery',
+    description: 'Doorstep dropoff and pickup anywhere in Dubai or Abu Dhabi.',
+    icon: 'Truck',
+  },
+];
+
+export type Faq = {
+  id: string;
+  question: string;
+  answer: string;
+};
+
+export const faqs: Faq[] = [
+  {
+    id: 'security-deposit',
+    question: 'Is a security deposit required?',
+    answer:
+      'For general rentals, we hold a standard deposit via credit card pre-authorization. However, our Premium members enjoy completely deposit-free bookings.',
+  },
+  {
+    id: 'extend-rental',
+    question: 'Can I extend my rental return date?',
+    answer:
+      'Yes, easily. Contact your dedicated concierge manager via WhatsApp at least 4 hours prior to your scheduled return to arrange an extension.',
+  },
+  {
+    id: 'reserve-specific-car',
+    question: 'How do I reserve a specific car?',
+    answer:
+      'Simply click Book Now, choose your dates, or message us directly on WhatsApp. We guarantee the exact model, year, and color selected.',
+  },
+  {
+    id: 'exceed-mileage',
+    question: 'What if I exceed the mileage limit?',
+    answer:
+      'The rental car is only allowed a maximum of 250 kilometres of driving per day. The additional miles driven will be charged at the end of the rental period, depending on the type of vehicle.',
+  },
+  {
+    id: 'insurance-policies',
+    question: 'What kinds of insurance policies do you have?',
+    answer:
+      'When you hire a car from us, you have an option to choose an insurance coverage called CDW. CDW (Collision Damage Waiver) covers you from any damage to the rental cars in a collision. We recommend that you add this to your rental.',
+  },
+  {
+    id: 'smoking-permitted',
+    question: 'Is smoking permitted in rental cars?',
+    answer:
+      'Smoking inside the car is not allowed; if you smoke inside the vehicle, we will charge 1000 AED in addition to the rental payment, which will be used to clean the smell of the tobacco inside the car.',
+  },
+];
 
 export const benefits: Benefit[] = [
   {
