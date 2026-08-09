@@ -20,7 +20,10 @@ const ICONS: Record<string, LucideIcon> = {
 
 export function WhyChooseUs() {
   return (
-    <section id="about" className="bg-[var(--bg-cream)] py-20 sm:py-24">
+    <section
+      id="about"
+      className="flex min-h-[calc(100vh-5rem)] scroll-mt-20 snap-start flex-col justify-center bg-[var(--bg-cream)] py-20 sm:py-24"
+    >
       <div className="mx-auto max-w-content px-5 sm:px-8 lg:px-10">
         <div className="text-center">
           <h2 className="font-display text-2xl font-bold text-[var(--text-primary)] sm:text-3xl">

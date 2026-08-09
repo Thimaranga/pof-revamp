@@ -9,11 +9,16 @@ export default function Home() {
   return (
     <main>
       <Navbar />
-      <Hero />
-      <BrandMarquee />
+      <section
+        id="home"
+        className="grid min-h-[calc(100vh-5rem)] scroll-mt-20 snap-start grid-rows-[minmax(0,1fr)_auto]"
+      >
+        <Hero />
+        <BrandMarquee />
+      </section>
       <FeaturedFleet />
       <WhyChooseUs />
-      <Footer />
+      <Footer snap />
     </main>
   );
 }
