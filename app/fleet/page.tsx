@@ -10,7 +10,11 @@ export const metadata: Metadata = {
     'Browse and filter our full collection of exotic and luxury rental cars in Dubai.',
 };
 
-export default function FleetPage() {
+export default function FleetPage({
+  searchParams,
+}: {
+  searchParams: { search?: string };
+}) {
   return (
     <main>
       <Navbar />
@@ -48,7 +52,7 @@ export default function FleetPage() {
 
       <section className="bg-[var(--bg-cream)] py-12 sm:py-16">
         <div className="mx-auto max-w-content px-5 sm:px-8 lg:px-10">
-          <FleetBrowser />
+          <FleetBrowser initialSearch={searchParams.search ?? ''} />
         </div>
       </section>
 
