@@ -40,10 +40,15 @@ export function Hero() {
             delivered to your door.
           </p>
 
-          <form className="mt-8 flex w-full max-w-md items-center gap-2 rounded-full bg-white p-1.5 pl-4 shadow-lg sm:gap-3">
+          <form
+            action="/fleet"
+            method="GET"
+            className="mt-8 flex w-full max-w-md items-center gap-2 rounded-full bg-white p-1.5 pl-4 shadow-lg sm:gap-3"
+          >
             <Search size={18} className="shrink-0 text-neutral-400" />
             <input
               type="text"
+              name="search"
               placeholder="Search by brand or model"
               className="w-full min-w-0 bg-transparent text-sm text-neutral-800 placeholder:text-neutral-400 focus:outline-none"
             />

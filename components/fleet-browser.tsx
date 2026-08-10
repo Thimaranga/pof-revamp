@@ -9,13 +9,13 @@ import { fleetInventory } from '@/lib/data';
 const AED = new Intl.NumberFormat('en-US');
 const PER_PAGE = 8;
 
-export function FleetBrowser() {
+export function FleetBrowser({ initialSearch = '' }: { initialSearch?: string }) {
   const brandOptions = useMemo(
     () => ['All', ...Array.from(new Set(fleetInventory.map((car) => car.brand)))],
     [],
   );
 
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState(initialSearch);
   const [brand, setBrand] = useState('All');
   const [page, setPage] = useState(0);
 
